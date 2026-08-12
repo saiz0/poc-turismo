@@ -473,6 +473,7 @@ O workflow [`.github/workflows/validate.yml`](.github/workflows/validate.yml) ex
 ├── dados_bahia.json                # 5.000 registros sintéticos
 ├── docker-compose.yml              # Infraestrutura, API, coordenador e workers
 ├── Dockerfile
+├── LICENSE                          # Licença MIT
 ├── requirements.txt
 └── .env.example
 ```
@@ -572,4 +573,4 @@ O `sentence-transformers` instala o PyTorch e suas dependências. Além disso, o
 
 ## Licença
 
-O projeto ainda não possui uma licença. Antes de aceitar contribuições ou permitir reutilização externa, adicione uma licença compatível com o objetivo do repositório.
+Este projeto é distribuído sob a [Licença MIT](LICENSE).
