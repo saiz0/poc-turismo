@@ -2,6 +2,10 @@
 
 PoC de uma busca turística híbrida que combina texto aproximado, filtros relacionais e similaridade semântica — executando localmente com Docker.
 
+## Demonstração
+
+![Demonstração da busca híbrida](docs/demonstracao.gif)
+
 Em vez de exigir vários formulários, a aplicação recebe consultas em linguagem natural:
 
 ```text
@@ -469,6 +473,7 @@ O workflow [`.github/workflows/validate.yml`](.github/workflows/validate.yml) ex
 ├── app.py                          # API e busca híbrida
 ├── coordinator.py                  # Fan-out da importação em 5.000 mensagens
 ├── worker.py                       # Embedding individual, staging e fan-in
+├── docs/demonstracao.gif           # Demonstração da interface
 ├── index.html                      # Interface web
 ├── dados_bahia.json                # 5.000 registros sintéticos
 ├── docker-compose.yml              # Infraestrutura, API, coordenador e workers
