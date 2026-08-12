@@ -1,0 +1,29 @@
+{
+  "city_aliases": {
+    "capital": "Salvador",
+    "capital da bahia": "Salvador",
+    "ssa": "Salvador"
+  },
+  "type_aliases": {
+    "Praia": ["praia", "praias", "litoral"],
+    "Cachoeira": ["cachoeira", "cachoeiras", "queda d'agua", "quedas d'agua"],
+    "Trilha": ["trilha", "trilhas", "caminhada", "caminhadas"],
+    "Museu": ["museu", "museus"],
+    "Parque Ecológico": ["parque", "parques", "parque ecologico", "reserva ecologica"],
+    "Mirante": ["mirante", "mirantes"],
+    "Mercado Cultural": ["mercado", "mercado cultural", "feira cultural"],
+    "Passeio Náutico": ["nautico", "passeio nautico", "passeio de barco"],
+    "Sítio Arqueológico": ["arqueologico", "sitio arqueologico", "sitios arqueologicos"],
+    "Centro Histórico": ["historico", "centro historico", "casario historico"]
+  },
+  "boolean_filters": {
+    "is_gratis": {
+      "true": ["gratis", "gratuito", "gratuita", "gratuitos", "gratuitas", "de graca", "sem custo", "entrada livre", "nao quero lugar pago", "nao quero passeio pago", "nao quero pagar"],
+      "false": ["pago", "paga", "pagos", "pagas", "entrada paga", "passeio pago", "ingresso pago", "com ingresso"]
+    },
+    "tem_acessibilidade": {
+      "true": ["acessivel", "acessiveis", "acessibilidade", "cadeirante", "cadeirantes", "mobilidade reduzida", "para idoso", "para idosos"],
+      "false": ["sem acessibilidade", "nao acessivel", "nao acessiveis", "acessibilidade limitada"]
+    }
+  }
+}

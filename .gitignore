@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Ambientes virtuais
+.venv/
+venv/
+env/
+
+# Configurações locais e segredos
+.env
+.env.*
+!.env.example
+
+# IDEs e sistema operacional
+.idea/
+.vscode/
+*.code-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs, temporários e artefatos
+*.log
+*.tmp
+*.bak
+dist/
+build/
+coverage/
+
+# Modelos e caches locais
+.cache/
+.huggingface/
+.ollama/
+
+# Artefatos de mídia e demonstrações
+video_frames/
+video_*_frames/
+*.mp4
+*.webm
+

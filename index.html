@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Descubra a Bahia</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --blue: #075985;
+      --sand: #fff8e7;
+      --ink: #16302b;
+      --accent: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(145deg, #dff7f5 0%, var(--sand) 55%, #fde7b2 100%);
+    }
+
+    main {
+      width: min(900px, 92%);
+      margin: auto;
+      padding: 9vh 0 5rem
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem
+    }
+
+    h1 {
+      margin: .25rem;
+      font-size: clamp(2.2rem, 7vw, 4.5rem);
+      letter-spacing: -.06em
+    }
+
+    header p {
+      font-size: 1.1rem
+    }
+
+    .search {
+      position: relative;
+      max-width: 720px;
+      margin: auto
+    }
+
+    .search-row {
+      display: flex;
+      padding: .5rem;
+      background: white;
+      border-radius: 999px;
+      box-shadow: 0 20px 55px #07598522;
+      border: 1px solid #fff
+    }
+
+    input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      padding: .8rem 1rem;
+      font-size: 1.05rem;
+      background: transparent
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: .85rem 1.35rem;
+      color: white;
+      background: var(--blue);
+      font-weight: 700;
+      cursor: pointer
+    }
+
+    button:disabled {
+      opacity: .65;
+      cursor: wait
+    }
+
+    .suggestions {
+      display: none;
+      position: absolute;
+      z-index: 2;
+      left: 1rem;
+      right: 1rem;
+      background: white;
+      border-radius: 0 0 1rem 1rem;
+      overflow: hidden;
+      box-shadow: 0 15px 30px #0002
+    }
+
+    .suggestions button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      border-radius: 0;
+      background: white;
+      color: var(--ink);
+      font-weight: 400
+    }
+
+    .suggestions button:hover {
+      background: #edf9f7
+    }
+
+    .status {
+      text-align: center;
+      min-height: 3rem;
+      padding: 1rem
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem
+    }
+
+    article {
+      background: #ffffffd9;
+      border: 1px solid white;
+      padding: 1.25rem;
+      border-radius: 1.25rem;
+      box-shadow: 0 8px 25px #07598512
+    }
+
+    article h2 {
+      font-size: 1.2rem;
+      margin: .3rem 0
+    }
+
+    .tags {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap
+    }
+
+    .tag {
+      background: #dff7f5;
+      color: var(--blue);
+      padding: .25rem .55rem;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 700
+    }
+
+    .meta {
+      font-size: .85rem;
+      color: #49635e
+    }
+
+    .error {
+      color: #b91c1c
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <div>🌴 TURISMO INTELIGENTE</div>
+      <h1>Descubra a Bahia</h1>
+    </header>
+    <section class="search">
+      <form class="search-row" id="form"><input id="query" autocomplete="off"
+          placeholder="Ex.: cachoeira gratuita perto de Lençóis" minlength="2"><button id="submit">Buscar</button>
+      </form>
+      <div class="suggestions" id="suggestions"></div>
+    </section>
+    <div class="status" id="status"></div>
+    <section class="results" id="results"></section>
+  </main>
+  <script>
+    const $ = id => document.getElementById(id), query = $('query'), suggestions = $('suggestions'), status = $('status'), results = $('results'), submit = $('submit');
+    const escapeHtml = value => String(value).replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+    let timer;
+    query.addEventListener('input', () => {
+      clearTimeout(timer); suggestions.style.display = 'none'; if (query.value.trim().length < 2) return;
+      timer = setTimeout(async () => {
+        try {
+          const requested = query.value.trim(); const r = await fetch('/autocomplete?q=' + encodeURIComponent(requested)); if (!r.ok) return;
+          const data = await r.json(); if (query.value.trim() !== requested || submit.disabled) return; suggestions.innerHTML = data.map(x => `<button type="button" data-name="${escapeHtml(x.nome)}"><b>${escapeHtml(x.nome)}</b> · ${escapeHtml(x.tipo)} em ${escapeHtml(x.cidade)}</button>`).join(''); suggestions.style.display = data.length ? 'block' : 'none';
+        } catch { }
+      }, 250);
+    });
+    suggestions.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; query.value = b.dataset.name; suggestions.style.display = 'none'; search(); });
+    document.addEventListener('click', e => { if (!e.target.closest('.search')) suggestions.style.display = 'none' });
+    $('form').addEventListener('submit', e => { e.preventDefault(); search() });
+    async function search() {
+      const q = query.value.trim(); if (q.length < 2) return; suggestions.style.display = 'none'; submit.disabled = true; status.textContent = 'Interpretando sua busca…'; results.innerHTML = '';
+      try {
+        const r = await fetch('/buscar?q=' + encodeURIComponent(q)); if (!r.ok) throw new Error(); const data = await r.json();
+        status.textContent = data.resultados.length ? `${data.resultados.length} sugestões encontradas` : 'Nenhum lugar encontrado.';
+        results.innerHTML = data.resultados.map(x => `<article><div class="tags"><span class="tag">${escapeHtml(x.tipo)}</span><span class="tag">${escapeHtml(x.cidade)}</span></div><h2>${escapeHtml(x.nome)}</h2><p>${escapeHtml(x.descricao)}</p><div class="meta">${x.is_gratis ? 'Entrada gratuita' : 'Entrada paga'} · ${x.tem_acessibilidade ? 'Acessível' : 'Acessibilidade limitada'} · relevância ${Math.round(x.relevancia * 100)}%</div></article>`).join('');
+      } catch { status.innerHTML = '<span class="error">Não foi possível consultar a API. Verifique se os serviços estão ativos.</span>'; } finally { submit.disabled = false; }
+    }
+  </script>
+</body>
+
+</html>
